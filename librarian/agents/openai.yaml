@@ -1,0 +1,5 @@
+interface:
+  display_name: "Librarian"
+  short_description: "Find and catalog repos"
+policy:
+  allow_implicit_invocation: true

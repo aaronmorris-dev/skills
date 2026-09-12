@@ -1,0 +1,5 @@
+interface:
+  display_name: "Ask Questions if Underspecified"
+  short_description: "Ask the user questions if underspecificed"
+policy:
+  allow_implicit_invocation: true

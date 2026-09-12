@@ -1,0 +1,6 @@
+interface:
+  display_name: "Create CLI"
+  short_description: "Design clear, scriptable command-line interfaces"
+  default_prompt: "Use $cli-create to design a human-friendly CLI specification."
+policy:
+  allow_implicit_invocation: true
