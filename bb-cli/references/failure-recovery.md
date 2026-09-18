@@ -30,3 +30,7 @@ sendAt?, reason? })`.
 - Use `bb thread cancel-plan <id>` to exit an active Plan turn without
   optimistically clearing its banner. Use `bb thread clear-goal <id>` to clear
   a thread's durable active Goal when supported by its provider. Both wait for provider confirmation.
+
+## Launcher startup
+
+For launcher startup errors and service output, inspect `logs/server-stdio.log` or `logs/host-daemon-stdio.log` under the selected BB data directory. These append across restarts; launchers capture service output there instead of forwarding it to the terminal. Select the relevant time range and keep credentials out of reported output.

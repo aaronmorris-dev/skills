@@ -1,8 +1,6 @@
 ---
 name: install-lint-rules
-description: Install or update the shared Oxlint, Ruff, yamllint, or markdownlint-cli2
-  policy in a project. Use when adding centralized lint rules, copying lint
-  configuration, or refreshing an existing project from ~/.config/lint.
+description: Install or update a project from the shared lint policy in ~/.config/lint.
 ---
 
 # Install lint rules
@@ -24,6 +22,8 @@ scripts/yamllint-install.sh [target] [--force]
 scripts/markdownlint-install.sh [target] [--force]
 ```
 
+Resolve script paths relative to this skill directory and use absolute paths when invoking them from a project. These commands modify the target project's configuration, manifests, and lockfiles and may populate package-manager caches; disclose those effects before execution.
+
 The scripts install exact dependencies using the detected Bun/npm/pnpm/Yarn
 manager or `uv`. If a required manifest is absent or detection is ambiguous,
 ask before proceeding; never initialize an ecosystem silently.
@@ -42,8 +42,8 @@ semantically:
   retain the copied `plugins` paths.
 - Add Effect rules only when `effect` is a direct dependency or the user asks.
 
-Before replacing an existing config, ask **Merge or force replace?** Use
-`--force` only after explicit replacement approval. Never replace an entire
+Merge existing configuration by default within the requested policy update. Use
+`--force` only when replacement was explicitly authorized; ask only if a real conflict cannot be resolved from project policy. Never replace an entire
 `pyproject.toml`; merge its Ruff tables instead.
 
 ## Project commands and checks
@@ -52,6 +52,4 @@ Register a tool-specific lint command in the project's existing task system.
 Add a top-level `lint` or `format:check` command only when absent and
 unambiguous. Do not change CI or Git hooks unless requested.
 
-Run the installed linter, then the repository's normal lint, typecheck, tests,
-and build. Report copied files, package-manager changes, preserved local
-configuration, enabled Effect rules, and check results.
+Run the affected linter and repository-required checks. Add typecheck, tests, or build only when the configuration or dependency change makes them relevant. Report copied files, dependency changes, preserved local configuration, enabled Effect rules, and actual check results.

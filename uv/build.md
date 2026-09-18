@@ -1,6 +1,6 @@
 # uv Build Backend
 
-Use `uv_build` for pure Python packages. For extension modules, use `hatchling` instead.
+For a new pure Python package, consider `uv_build`; preserve an existing backend unless a migration is requested. Native extension builds need an appropriate supported backend for their actual toolchain; do not assume that changing to `hatchling` alone provides compilation. The example version range is illustrative, not a current-version recommendation.
 
 ## pyproject.toml
 

@@ -221,3 +221,13 @@ Resuming a machine restores its provider state without rerunning environment set
 Personal file access: `bb project paths|files|content proj_personal` requires
 an explicit `--environment <id>` belonging to Personal. Personal has no default
 project source; the selected environment must be ready.
+
+## Provider and teardown details
+
+Provider `requires` facts (`projectCheckout`, `gitCheckout`, `gitRemote`, `projectless`) determine where an environment is offered. The `inputs` schema determines whether empty inputs are valid; inspect it before provisioning.
+
+`bb environment providers` lists Project checkout, Worktree, then other installed providers by display name. With project and machine selectors it reports that machine's availability: available, setup-required, unavailable, or unknown pending a probe. Read or set `managedBranchPrefix` through `bb settings show` and `bb settings general <key> <value>`.
+
+Use `bb machine suspend|resume` only for providers exposing those operations. `bb machine retry-cleanup` requests another failed teardown attempt. Provider inventory errors must be reported; estimates in `providerDetails` are not billing or invoice records.
+
+`bb environment delete <id>` requests immediate cleanup even under a never-retire policy. Destruction is recorded after cleanup finishes; live or stopping runtimes delay removal. Project source deletion remains available during project deletion, including the last source, so teardown can finish. Verify ownership and authorization before requesting cleanup or source deletion.

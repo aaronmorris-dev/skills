@@ -1,0 +1,3 @@
+interface:
+  display_name: "peekaboo"
+  short_description: "Capture and automate macOS UI with the Peekaboo CLI."

@@ -1,5 +1,5 @@
 interface:
   display_name: "Ask Questions if Underspecified"
-  short_description: "Ask the user questions if underspecificed"
+  short_description: "Resolve consequential ambiguity with few questions"
 policy:
   allow_implicit_invocation: true

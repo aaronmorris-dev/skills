@@ -1,11 +1,17 @@
 ---
 name: github
-description: "Interact with GitHub using the `gh` CLI. Use `gh issue`, `gh pr`, `gh run`, and `gh api` for issues, PRs, CI runs, and advanced queries."
+description: Inspect or manage GitHub issues, pull requests, and CI with the gh CLI.
 ---
 
 # GitHub Skill
 
 Use the `gh` CLI to interact with GitHub. Always specify `--repo owner/repo` when not in a git directory, or use URLs directly.
+
+## Writes and message bodies
+
+A URL authorizes investigation, not a remote mutation. Use the applicable working agreement for commit, push, landing, shipping, and release authority and identity checks. Confirm the target repository and actual authenticated writer before a write; do not print credentials.
+
+For multiline PR or issue text, prepare a temporary file with a quoted heredoc, inspect it, and pass `--body-file`. Do not embed user prose, backticks, or shell expressions in a double-quoted command argument. Sanitize public content for secrets and internal identifiers. Verify the resulting state and return its link.
 
 ## Pull Requests
 

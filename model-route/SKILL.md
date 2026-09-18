@@ -1,6 +1,6 @@
 ---
 name: model-route
-description: "Recommend and compare current AI models and providers for a task using models.dev data, including capabilities, context and output limits, modalities, tool use, reasoning, availability, and token costs. Use when the user asks which model, model tier, or provider to use; wants a cheaper or stronger fallback; or needs a model comparison constrained by budget, tokens, tools, or input type."
+description: Compare AI models and providers using current catalog data when model choice, capability, or cost is requested.
 ---
 
 # Model Route
@@ -9,7 +9,7 @@ Recommend a specific model and provider from current catalog data rather than re
 
 ## Find candidates
 
-Use `scripts/find-models.sh`. It transparently fetches or refreshes the cached models.dev catalog and returns compact JSON containing matching provider/model offerings.
+Resolve helper paths relative to this skill directory. Use `scripts/find-models.sh`. It transparently fetches or refreshes the cached models.dev catalog and returns compact JSON containing matching provider/model offerings.
 
 ```bash
 scripts/find-models.sh --reasoning --tools --min-context 200000 --max-input-cost 5
@@ -39,6 +39,6 @@ Return:
 - **Confidence:** high, medium, or low
 - **Why:** task fit tied to observed capabilities, limits, and cost
 - **Tradeoff:** main compromise
-- **Fallback:** exact alternative and when to use it
+- **Fallback, when useful:** exact alternative and when to use it
 
 Include a compact comparison table only when candidates are genuinely close. State assumptions and unknown fields explicitly.

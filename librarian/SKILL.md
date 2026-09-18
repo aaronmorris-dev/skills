@@ -1,75 +1,25 @@
 ---
 name: librarian
-description: "Cache and refresh remote git repositories under ~/.cache/checkouts/<host>/<org>/<repo> so future references can reuse a local copy. Use when the user points you to a remote git repository as reference or you encountered a remote git repo through other means."
+description: Cache or refresh a remote repository when local source inspection is needed.
 ---
 
-Use this skill when the user points you to a remote git repository (GitHub/GitLab/Bitbucket URLs, `git@...`, or `owner/repo` shorthand).
+# Librarian
 
-The goal is to keep a reusable local checkout that is:
-- **stable** (predictable path)
-- **up to date** (periodic fetch + fast-forward when safe)
-- **efficient** (partial clone with `--filter=blob:none`, no repeated full clones)
+Use an existing relevant checkout first. A repository URL alone is not a reason to clone or update it when the requested fact can be read directly. Respect read-only requests and explicit limits on fetching or changing checkouts.
 
-## Cache location
+For reusable reference-source inspection, the helper maintains `~/.cache/checkouts/<host>/<org>/<repo>`. This is a user-level cache, separate from personal projects in `~/Projects` and open-source working checkouts in `~/Development`. Disclose a new cache checkout or refresh before running it; do not update a user-managed checkout just to answer a question.
 
-Repositories are stored at:
+## Helpers
 
-`~/.cache/checkouts/<host>/<org>/<repo>`
-
-Example:
-
-`github.com/aaronmorris-dev/dspy-base-lm` → `~/.cache/checkouts/github.com/aaronmorris-dev/dspy-base-lm`
-
-## Command
+Resolve these scripts relative to this skill directory and pass their absolute paths from another working directory:
 
 ```bash
 scripts/checkout.sh <repo> --path-only
-```
-
-Examples:
-
-```bash
-scripts/checkout.sh aaronmorris-dev/dspy-base-lm --path-only
-scripts/checkout.sh github.com/aaronmorris-dev/dspy-base-lm --path-only
-scripts/checkout.sh https://github.com/aaronmorris-dev/dspy-base-lm --path-only
-```
-
-The script will:
-1. Parse the repo reference into host/org/repo.
-2. Clone if missing.
-3. Reuse existing checkout if present.
-4. Fetch from `origin` when stale (default interval: 300s).
-5. Attempt a fast-forward merge if the checkout is clean and has an upstream.
-
-## Catalog
-
-Retrieve all cached checkout paths with:
-
-```bash
 scripts/catalog.sh
 ```
 
-Paths are sorted and printed one per line. `LIBRARIAN_CACHE_ROOT` overrides the default cache root.
+The checkout helper accepts HTTPS/SSH repository references and `owner/repo` shorthand, which defaults to GitHub. It partially clones missing repositories, fetches stale cached repositories (normally after five minutes), and attempts a fast-forward only when clean with an upstream. Inspect its result rather than assuming refresh succeeded.
 
-## Update strategy
+`LIBRARIAN_CACHE_ROOT` overrides the cache location. Use `--force-update` only when immediate freshness is necessary. For historical material or offline work, inspect the existing checkout without invoking a refresh.
 
-- Default behavior is **throttled refresh** (every 5 minutes) to avoid unnecessary network calls.
-- Force immediate refresh with:
-
-```bash
-scripts/checkout.sh <repo> --force-update --path-only
-```
-
-## Recommended workflow
-
-1. Resolve repository path via `scripts/checkout.sh <repo> --path-only`.
-2. Use that path for searching, reading, and analysis.
-3. On later references to the same repo, call `scripts/checkout.sh` again; it will find and update the cached checkout.
-
-## If edits are needed
-
-Prefer not to edit directly in the shared cache. Create a separate worktree or copy from the cached checkout for task-specific modifications.
-
-## Notes
-
-- `owner/repo` defaults to `github.com`.
+Keep task edits outside the shared cache. Use a task-owned worktree or working checkout when implementation is authorized. A cache helper does not authorize pushes, branch changes in a user checkout, or unrelated repository mutations.

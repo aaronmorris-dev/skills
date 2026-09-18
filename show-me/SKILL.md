@@ -1,6 +1,6 @@
 ---
 name: show-me
-description: Explain the current topic with a concise visual such as a tree, diagram, diff, or focused HTML artefact. Use ONLY when the user explicitly asks to see, visualise, diagram, sketch, or be shown the preceding explanation.
+description: Visualize the current explanation with a tree, diagram, diff, or focused HTML artifact when explicitly requested.
 ---
 
 # Show Me

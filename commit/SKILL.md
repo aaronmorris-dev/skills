@@ -1,35 +1,22 @@
 ---
 name: commit
-description: "Read this skill before making git commits"
+description: Create task-scoped Git commits using the user's commit conventions.
 ---
 
-Create a git commit for the current changes using a concise Conventional Commits-style subject.
+# Commit
 
-## Format
+Use a concise Conventional Commit subject: `<type>(<optional-scope>): <summary>`. Keep the imperative summary within 72 characters and omit its trailing period. Follow repository conventions for meaningful scope and human contributor credit.
 
-`<type>(<scope>): <summary>`
+## Prepare the exact change
 
-- `type` REQUIRED. Use `feat` for new features, `fix` for bug fixes. Other common types: `docs`, `refactor`, `chore`, `test`, `perf`.
-- `scope` OPTIONAL. Short noun in parentheses for the affected area (e.g., `api`, `parser`, `ui`).
-- `summary` REQUIRED. Short, imperative, <= 72 chars, no trailing period.
+Inspect `git status -sb`, the worktree diff, and the staged diff. Stage only changes belonging to the requested task, respecting any named file limits. Missing file arguments do not authorize committing every change. Preserve unrelated staged work; ask only if ownership or overlapping changes cannot be resolved.
 
-## Notes
+Before committing, verify effective author and committer identities with `git var GIT_AUTHOR_IDENT` and `git var GIT_COMMITTER_IDENT`, and verify the authenticated GitHub writer as required by the applicable working agreement. Use the configured review workflow and relevant checks required by the repository and user. Do not change identity, amend, or expand scope implicitly.
 
-- Body is OPTIONAL. If needed, add a blank line after the subject and write short paragraphs.
-- Do NOT include breaking-change markers or footers.
-- Do NOT add sign-offs (no `Signed-off-by`).
-- Only commit; do NOT push.
-- If it is unclear whether a file should be included, ask the user which files to commit.
-- Treat any caller-provided arguments as additional commit guidance. Common patterns:
-  - Freeform instructions should influence scope, summary, and body.
-  - File paths or globs should limit which files to commit. If files are specified, only stage/commit those unless the user explicitly asks otherwise.
-  - If arguments combine files and instructions, honor both.
+## Message and completion
 
-## Steps
+A body is optional; explain a non-obvious reason or consequence when useful. Do not add agent attribution, generated-by footers, or sign-offs. Preserve human credit and repository-required release information. Use breaking-change metadata only when an actual public contract change and repository convention require it.
 
-1. Infer from the prompt if the user provided specific file paths/globs and/or additional instructions.
-2. Review `git status` and `git diff` to understand the current changes (limit to argument-specified files if provided).
-3. (Optional) Run `git log -n 50 --pretty=format:%s` to see commonly used scopes.
-4. If there are ambiguous extra files, ask the user for clarification before committing.
-5. Stage only the intended files (all changes if no files specified).
-6. Run `git commit -m "<subject>"` (and `-m "<body>"` if needed).
+For a multiline message, write a temporary message file with a quoted heredoc, inspect it, and use `git commit --file <path>` so prose cannot be interpreted as shell code.
+
+After committing, verify the commit and repository state. A commit request alone does not authorize a push. Continue with push, landing, or shipping only when that wider workflow was authorized; this skill does not introduce a stop before its remaining steps.

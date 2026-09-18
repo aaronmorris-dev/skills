@@ -1,54 +1,25 @@
 ---
 name: zed-cli
-description: Zed CLI integration for viewing diffs and comparing files. Use when showing file changes, comparing revisions, or reviewing Git differences visually in Zed.
+description: Show file or Git revision comparisons in Zed when the user requests a Zed diff.
 ---
 
-# Zed CLI Tools
+# Zed CLI
 
-Use the Zed CLI to view and compare files.
+Use the installed `zed` CLI to show the requested comparison. If unavailable, explain the limitation; adding a CLI to the user's PATH is a user-level setup change.
 
-## Requirements
-
-Ensure Zed is installed and the `zed` CLI is available in `PATH`.
-
-On macOS, install the CLI from Zed's command palette with **Install CLI**. Linux installations include the CLI.
-
-## Opening a Diff
-
-Compare two files side by side:
+For two existing files:
 
 ```bash
 zed --diff <file1> <file2>
 ```
 
-## Git Diffs
-
-Extract the older revision to a temporary file, then compare it with the current file.
-
-### Compare With the Previous Commit
+For a Git comparison, verify the selected revision and path, extract it to a unique temporary directory, and open it against the current file. For example, from the repository root:
 
 ```bash
-git show HEAD~1:path/to/file > /tmp/old
-zed --diff /tmp/old path/to/file
+diff_dir=$(mktemp -d "${TMPDIR:-/tmp}/zed-diff.XXXXXX")
+git show 'HEAD~1:path/to/file' > "$diff_dir/before"
+# Run only after git show succeeds.
+zed --diff "$diff_dir/before" path/to/file
 ```
 
-### Compare With a Specific Commit
-
-```bash
-git show abc123:path/to/file > /tmp/old
-zed --diff /tmp/old path/to/file
-```
-
-### Compare the Staged Version With the Working Tree
-
-```bash
-git show :path/to/file > /tmp/staged
-zed --diff /tmp/staged path/to/file
-```
-
-## Gotchas
-
-- Ensure the file exists in the selected Git revision.
-- Ensure the compared revisions contain changes.
-- Run `git log --oneline -5 -- path/to/file` to confirm the file has history.
-- Use distinct temporary filenames when opening multiple comparisons concurrently.
+Use `:path/to/file` for the staged version or the verified commit/ref for another revision. Keep temporary files until Zed has loaded them, and never overwrite a shared `/tmp/old` or `/tmp/staged`. Report which versions were compared.

@@ -1,7 +1,9 @@
 ---
 name: uv
-description: "Use `uv` instead of pip/python/venv. Run scripts with `uv run script.py`, add deps with `uv add`, use inline script metadata for standalone scripts."
+description: Run standalone Python scripts or manage dependencies in uv-based projects.
 ---
+
+Prefer the repository's existing runtime and package manager. Use uv for standalone scripts and new Python work unless the user specifies another tool; do not migrate an existing project or build backend implicitly. Ad-hoc dependencies use a tool/cache environment; `uv add` changes the project's manifest and lockfile. Disclose installation effects before running them.
 
 ## Quick Reference
 
@@ -26,7 +28,7 @@ See [scripts.md](scripts.md) for full details on running scripts, locking, and r
 
 ## Build Backend
 
-Use `uv_build` for pure Python packages:
+For new pure Python packages without an established backend, consider `uv_build`. Preserve an existing backend unless migration is requested. This example's version range is illustrative; use the project's supported version or verify a current range when creating a package:
 
 ```toml
 [build-system]

@@ -1,5 +1,5 @@
 interface:
   display_name: "Librarian"
-  short_description: "Find and catalog repos"
+  short_description: "Cache source checkouts for local inspection"
 policy:
   allow_implicit_invocation: true
