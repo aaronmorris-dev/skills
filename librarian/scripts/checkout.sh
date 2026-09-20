@@ -75,6 +75,11 @@ if [[ -z "$repo_input" ]]; then
   exit 2
 fi
 
+command -v git >/dev/null 2>&1 || {
+  echo "error: git is required" >&2
+  exit 127
+}
+
 if ! [[ "$update_interval" =~ ^[0-9]+$ ]]; then
   echo "error: update interval must be a non-negative integer" >&2
   exit 2
@@ -166,18 +171,33 @@ parse_repo() {
   printf '%s\n%s\n%s\n' "$host" "$org" "$repo"
 }
 
+parsed="$(parse_repo "$repo_input")" || {
+  status=$?
+  exit "$status"
+}
+
 parsed_host=""
 parsed_org=""
 parsed_repo=""
 parsed_index=0
+
 while IFS= read -r line; do
   case "$parsed_index" in
     0) parsed_host="$line" ;;
     1) parsed_org="$line" ;;
     2) parsed_repo="$line" ;;
+    *)
+      echo "error: repository parser returned unexpected output" >&2
+      exit 2
+      ;;
   esac
   parsed_index=$((parsed_index + 1))
-done < <(parse_repo "$repo_input")
+done <<< "$parsed"
+
+if (( parsed_index != 3 )); then
+  echo "error: failed to parse repository: $repo_input" >&2
+  exit 2
+fi
 
 host="$parsed_host"
 org="$parsed_org"
